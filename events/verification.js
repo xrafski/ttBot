@@ -49,7 +49,7 @@ bot.on('messageReactionAdd', async (reaction, user) => {
         } else {
             switch (verificationContent[1].toLowerCase()) {
                 case 'm': case 'member': case 'memeber': {
-                    giveRoleToUser(reaction.message.member);
+                    giveMemberRole(reaction.message.member);
                     return renameUser(reaction.message.member, verificationContent[0], "member");
                 }
                 case 'n': case 'nonmember': case 'nomember': case 'nonmemeber': case 'nomemeber': return renameUser(reaction.message.member, verificationContent[0], "nonmember");
@@ -73,12 +73,12 @@ bot.on('messageReactionAdd', async (reaction, user) => {
                 case "member": return member.setNickname(nickname + '🍀', 'Verification System')
                     // .then(changed => { console.debug(`${member.user.tag} nickname changed to: ${changed.nickname}`) })
                     .catch(error => reaction.message.channel.send(`❌ ${reaction.message.author.tag} rename error:\n\`\`\`${error.message}\`\`\``).catch(() => { return })
-                        .then(message => { if (message) message.delete({ timeout: 15000 }) }).catch(() => { return }));
+                        .then(message => { if (message) message.delete({ timeout: 10000 }) }).catch(() => { return }));
 
                 case "nonmember": return member.setNickname(nickname, 'Verification System')
                     // .then(changed => { console.debug(`${member.user.tag} nickname changed to: ${changed.nickname}`) })
                     .catch(error => reaction.message.channel.send(`❌ ${reaction.message.author.tag} rename error:\n\`\`\`${error.message}\`\`\``).catch(() => { return })
-                        .then(message => { if (message) message.delete({ timeout: 15000 }) }).catch(() => { return }));
+                        .then(message => { if (message) message.delete({ timeout: 10000 }) }).catch(() => { return }));
 
                 default: return;
             }
@@ -94,41 +94,55 @@ bot.on('messageReactionAdd', async (reaction, user) => {
         }
     }
 
-    async function giveRoleToUser(memberObject) {
+    async function giveMemberRole(memberObject) {
         const role2add = reaction.message.guild.roles.cache.find(role => role.id === config.memberRoleID);
-        if (role2add) {
+        const role2del = reaction.message.guild.roles.cache.find(role => role.id === config.nonmemberRoleID);
 
+        if (role2add && role2del) {
             if (memberObject) {
-                var MemberRoleAdded = await memberObject.roles.add(role2add)
-                    .catch(error => {
-                        reaction.message.channel.send(`❌ Error to add ${role2add.name} to ${memberObject.user.tag}!\n\`\`\`${error.message}\`\`\``).catch(() => { return })
-                            .then(message => { if (message) message.delete({ timeout: 10000 }) }).catch(() => { return })
+                await memberObject.roles.add(role2add).catch(error => {
+                    reaction.message.channel.send(`❌ Error to add ${role2add.name} to ${memberObject.user.tag}!\n\`\`\`${error.message}\`\`\``).catch(() => { })
+                        .then(message => { if (message) message.delete({ timeout: 10000 }) }).catch(() => { });
 
-                        reaction.users.remove(user.id)
-                            .catch(error => reaction.message.channel.send(`❌ Bot reaction error:\n\`\`\`${error.message}\`\`\``).catch(() => { return })
-                                .then(message => { if (message) message.delete({ timeout: 10000 }) }).catch(() => { return })
-                            ); // remove reaction if the condition is not met
+                    reaction.users.remove(user.id) // remove reaction if error
+                        .catch(error => reaction.message.channel.send(`❌ Bot reaction error:\n\`\`\`${error.message}\`\`\``).catch(() => { })
+                            .then(message => { if (message) message.delete({ timeout: 10000 }) }).catch(() => { })
+                        );
+                })
+                    .then(async memberRoleAdded => {
+                        if (!memberRoleAdded) return;
+
+                        await memberObject.roles.remove(role2del).catch(error => {
+                            reaction.message.channel.send(`❌ Error to remove ${role2del.name} from ${memberObject.user.tag}!\n\`\`\`${error.message}\`\`\``).catch(() => { })
+                                .then(message => { if (message) message.delete({ timeout: 10000 }) }).catch(() => { });
+
+                            reaction.users.remove(user.id) // remove reaction if error
+                                .catch(error => reaction.message.channel.send(`❌ Bot reaction error:\n\`\`\`${error.message}\`\`\``).catch(() => { })
+                                    .then(message => { if (message) message.delete({ timeout: 10000 }) }).catch(() => { })
+                                );
+                        })
+                            .then(async nonmemberRoleAdded => {
+                                if (memberRoleAdded && nonmemberRoleAdded) return reaction.message.channel.send(`✅ ${role2add.name} added to ${memberObject.user.tag}`).catch(() => { })
+                                    .then(message => { if (message) message.delete({ timeout: 10000 }) }).catch(() => { });
+                            })
                     });
             } else {
-                reaction.users.remove(user.id)
+                reaction.users.remove(user.id) // remove reaction if the condition is not met
                     .catch(error => reaction.message.channel.send(`❌ Bot reaction error:\n\`\`\`${error.message}\`\`\``)
-                        .then(message => message.delete({ timeout: 10000 })).catch(() => { return })
-                    ); // remove reaction if the condition is not met
+                        .then(message => message.delete({ timeout: 10000 })).catch(() => { })
+                    );
 
-                return reaction.message.channel.send(`❌ Error to add ${role2add.name} to ${reaction.message.author.tag}\nUser not found as a discord member.`).catch(() => { return })
-                    .then(message => { if (message) message.delete({ timeout: 10000 }) }).catch(() => { return })
+                return reaction.message.channel.send(`❌ User not found as a server member.`).catch(() => { })
+                    .then(message => { if (message) message.delete({ timeout: 10000 }) }).catch(() => { });
             }
 
-            if (MemberRoleAdded) return reaction.message.channel.send(`✅ ${role2add.name} added to ${memberObject.user.tag}`).catch(() => { return })
-                .then(message => { if (message) message.delete({ timeout: 10000 }) }).catch(() => { return })
-
-        } else return reaction.message.channel.send(`❌ Error to find member role!`).catch(() => { return })
+        } else return reaction.message.channel.send(`❌ Error to find member or nonmember role!`).catch(() => { })
             .then(message => {
                 if (message) message.delete({ timeout: 10000 });
                 reaction.users.remove(user.id)
-                    .catch(error => reaction.message.channel.send(`❌ Bot reaction error:\n\`\`\`${error.message}\`\`\``).catch(() => { return })
-                        .then(message => { if (message) message.delete({ timeout: 10000 }) }).catch(() => { return })
+                    .catch(error => reaction.message.channel.send(`❌ Bot reaction error:\n\`\`\`${error.message}\`\`\``).catch(() => { })
+                        .then(message => { if (message) message.delete({ timeout: 10000 }) }).catch(() => { })
                     ); // remove reaction if the condition is not met
-            }).catch(() => { return })
+            }).catch(() => { });
     }
 })
