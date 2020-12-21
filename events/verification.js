@@ -35,7 +35,9 @@ bot.on('messageReactionAdd', async (reaction, user) => {
     //////////////////////////////////////////////////////////////////////////////////////////////
 
     function verificationFunction(message) {
-        const verificationContent = message.content.split('/');
+        const messageContentWithoutSpaces = message.content.replace(/\s/g, '');
+        const verificationContent = messageContentWithoutSpaces.split('/');
+        console.debug(verificationContent);
 
         if (!verificationContent[1]) {
             return message.channel.send(`❌ Invalid verification format`).catch(() => { return })
