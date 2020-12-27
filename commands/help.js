@@ -20,18 +20,18 @@ module.exports.run = async (bot, message, args) => {
         }
     }
 
+    let ownerCommands = await getCommands().filter(command => command.help.type.includes('owner')).map(command => `**${command.help.name}** • ${command.help.description}`).join('\n');
     let kickCommands = await getCommands().filter(command => command.help.type.includes('KICK_MEMBERS')).map(command => `**${command.help.name}** • ${command.help.description}`).join('\n');
     let publicCommands = await getCommands().filter(command => command.help.type.includes('public')).map(command => `**${command.help.name}** • ${command.help.description}`).join('\n');
     let disabledCommands = await getCommands().filter(command => command.help.type.includes('disabled')).map(command => `**${command.help.name}** • ${command.help.description}`).join('\n');
 
-    if (!kickCommands) kickCommands = 'There is no KICK_MEMBERS commands.';
-    if (!publicCommands) publicCommands = 'There is no public commands.';
+    if (!ownerCommands) ownerCommands = 'There are no owner commands.';
+    if (!kickCommands) kickCommands = 'There are no KICK_MEMBERS commands.';
+    if (!publicCommands) publicCommands = 'There are no public commands.';
 
     if (!disabledCommands) {
-        return message.channel.send(`List of all commands! (prefix: **${config.BotPrefix}**)\nType **${config.BotPrefix}help commandName** for more details.\n\n👮‍♂️ KICK_MEMBERS Commands:\n${kickCommands}\n\n📢 Public Commands:\n${publicCommands}`)
+        return message.channel.send(`List of all commands! (prefix: **${config.BotPrefix}**)\nType **${config.BotPrefix}help commandName** for more details.\n\n⭐ Owner Commands:\n${ownerCommands}\n\n👮‍♂️ KICK_MEMBERS Commands:\n${kickCommands}\n\n📢 Public Commands:\n${publicCommands}`)
             .then(helpMessage => messageRemoverWithReact(helpMessage, message.author));
-    }
-
-    return message.channel.send(`List of all commands! (prefix: **${config.BotPrefix}**)\nType **${config.BotPrefix}help commandName** for more details.\n\n👮‍♂️ KICK_MEMBERS Commands:\n${kickCommands}\n\n📢 Public Commands:\n${publicCommands}\n\n❌ Disabled Commands:\n${disabledCommands}`)
+    } else return message.channel.send(`List of all commands! (prefix: **${config.BotPrefix}**)\nType **${config.BotPrefix}help commandName** for more details.\n\n⭐ Owner Commands:\n${ownerCommands}\n\n👮‍♂️ KICK_MEMBERS Commands:\n${kickCommands}\n\n📢 Public Commands:\n${publicCommands}\n\n❌ Disabled Commands:\n${disabledCommands}`)
         .then(helpMessage => messageRemoverWithReact(helpMessage, message.author));
 }
