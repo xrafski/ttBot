@@ -53,7 +53,7 @@ bot.on('messageReactionAdd', async (reaction, user) => {
                     giveMemberRole(reaction.message.member);
                     return renameUser(reaction.message.member, verificationContent[0], "member");
                 }
-                case 'n': case 'nonmember': case 'nomember': case 'nonmemeber': case 'nomemeber': return renameUser(reaction.message.member, verificationContent[0], "nonmember");
+                case 'n': case 'nonmember': case 'nomember': case 'nonmemeber': case 'nomemeber': case 'non-member': case 'no-member': case 'non-memeber': case 'no-memeber': return renameUser(reaction.message.member, verificationContent[0], "nonmember");
                 default: {
                     return message.channel.send(`❌ Invalid verification format`).catch(() => { return })
                         .then(message => {
