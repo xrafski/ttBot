@@ -6,12 +6,13 @@ require('console-stamp')(console, 'dd/mm/yyyy - HH:MM:ss');
 const bot = new Discord.Client({ partials: ['MESSAGE', 'REACTION'] });
 
 // define current bot version
-const BotVersion = '1.0c';
+const BotVersion = '1.0d';
 
 // define global embed color
 const embedColors = {
-	'sayMessage': '#c4b9b9',				//	say.js
+	'sayMessage': '#c4b9b9',				// say.js
 	'pollMessage': "#c4b9b9",				// poll.js
+	'logMessage': '#defe86'					// edit.js
 }
 
 const emojiCharacters = {
@@ -27,10 +28,6 @@ const emojiCharacters = {
 	10: '🔟', '#': '#⃣', '*': '*⃣',
 	'!': '❗', '?': '❓', 'i': 'ℹ️',
 };
-
-// define icon image url for embeds
-// const TEAlogo = 'https://skillez.eu/images/discord/teabanner.png'
-const TEAlogo = 'https://i.imgur.com/erwViqL.png';
 
 // Load commands and events
 bot.commands = new Discord.Collection();
@@ -66,7 +63,6 @@ fs.readdir('./events/', (err, files) => {
 module.exports = {
 	bot: bot, // bot client
 	Discord: Discord, // discord module
-	TEAlogo: TEAlogo, // defines icon image url for embeds
 	embedColors: embedColors, // defines array of defined colors
 	BotVersion: BotVersion, // defines current bot version
 	emojiCharacters: emojiCharacters, // defines some discord emojis
@@ -136,7 +132,7 @@ module.exports = {
 			switch (error.message) {
 				case "Cannot read property 'send' of undefined": {
 					return logChannel.createWebhook(webHookName, {
-						avatar: 'https://skillez.eu/images/discord/teaicon.png',
+						avatar: 'https://skillez.eu/images/discord/ttbanner.png',
 					})
 						.then(webhook => {
 							webhook.send(embedMessage);

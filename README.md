@@ -1,2 +1,2 @@
 # ttBot
-Discord bot for Twisted Tranquility v1.0c
+Discord bot for Twisted Tranquility v1.0d

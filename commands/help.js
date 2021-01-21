@@ -1,4 +1,4 @@
-const { Discord, getCommands, getCommand, TEAlogo, messageRemoverWithReact } = require('../ttBot');
+const { Discord, getCommands, getCommand, messageRemoverWithReact } = require('../ttBot');
 const config = require("../bot-settings.json");
 
 module.exports.help = {
