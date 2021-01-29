@@ -14,7 +14,7 @@ bot.on("message", async message => {
     let cmdFile = bot.commands.get(command);
     if (cmdFile) {
         removeUserLastMessage(message);
-        console.info(`command-listener.js:1 (ℹ) '${message.author.tag}' used '${(message.content.length > 40 ? `${message.content.slice(0, 40)}...` : `${message.content}`)}' on the ${(message.channel?.name ? `#${message.channel.name} channel` : 'direct message')}.`);
+        console.info(`command-listener.js (ℹ) '${message.author.tag}' used '${(message.content.length > 40 ? `${message.content.slice(0, 40)}...` : `${message.content}`)}' on the ${(message.channel?.name ? `#${message.channel.name} channel` : 'direct message')}.`);
 
         switch (cmdFile.help.type) {
             case "KICK_MEMBERS": {
@@ -39,7 +39,7 @@ bot.on("message", async message => {
             case "disabled": if (message.channel.type != "dm") return botReply(`**${config.botPrefix}${cmdFile.help.name}** is currently **disabled**!`, message, 5000);
             else return botReply(`**${config.botPrefix}${cmdFile.help.name}** is not available on DM!`, message);
 
-            default: return errorLog(`command-listener.js:2 command switch() default - no type was found for the ${cmdFile.help.name} command.`);
+            default: return errorLog(`command-listener.js:1 command switch() default - no type was found for the ${cmdFile.help.name} command.`);
         }
     }
 });

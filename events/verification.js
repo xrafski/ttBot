@@ -21,7 +21,8 @@ bot.on('messageReactionAdd', async (reaction, user) => {
 
     if (captain || enforcer || officer || vice || leader) { // TT staff reactions
         if (reaction.emoji.name === '✅')
-            return verificationFunction(reaction.message);
+            return verificationFunction(reaction.message)
+                .then(() => console.info(`verification.js (ℹ) '${reaction.message.author.tag}' reacted with '${reaction.emoji.name}' on #${reaction.message.channel.name} channel under ${reaction.message.url} message.`));
         else return reaction.users.remove(user.id)
             .catch(error => botReply(`${user} ❌ Bot reaction error:\n\`\`\`${error}\`\`\``, reaction.message, 5000)); // remove reaction if the condition is not met
     } else return reaction.users.remove(user.id)
