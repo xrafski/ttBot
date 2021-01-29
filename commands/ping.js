@@ -1,3 +1,8 @@
+// ping.js
+// ================================
+
+const { botReply } = require("../ttBot");
+
 module.exports.help = {
     name: "ping",
     description: "Pong!",
@@ -6,12 +11,10 @@ module.exports.help = {
 };
 
 module.exports.run = async (bot, message) => {
-
-    //////////////////////////////////////////////////////////////////////////////////////////////
-    //                                           ping                                           //
-    //////////////////////////////////////////////////////////////////////////////////////////////
-
-    const ping = await message.channel.send('🏓 Pinging...')
+    const ping = await botReply('🏓 Pinging...', message)
     ping.edit(`🏓 Pong! \nLatency is **${Math.floor(ping.createdAt - message.createdAt)}** ms\nAPI Latency is **${Math.round(bot.ws.ping)}** ms.`)
-        .then(message => message.delete({ timeout: 30000 })).catch(() => { return });
+        .then(message => {
+            if (message?.deletable) message.delete({ timeout: 10000 }).catch(error => console.error(`ping.js:1 ${error}`));
+        })
+        .catch(error => console.error(`ping.js:2 () ${error}`));
 }

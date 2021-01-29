@@ -1,22 +1,18 @@
+// uptime.js
+// ================================
+
 const config = require("../bot-settings.json");
-// const { } = require("../ttBot");
+const { botReply } = require("../ttBot");
 
 module.exports.help = {
     name: "uptime",
     description: "Shows current uptime of the bot.",
     type: "public",
-    usage: `**${config.BotPrefix}uptime**`
+    usage: `**${config.botPrefix}uptime**`
 };
 
 module.exports.run = async (bot, message) => {
-    //////////////////////////////////////////////////////////////////////////////////////////////
-    //                                          uptime                                          //
-    //////////////////////////////////////////////////////////////////////////////////////////////
-
-    return message.channel.send(`Current TT bot uptime: **${convertMiliseconds(bot.uptime)}**.`)
-        .then(message => message.delete({ timeout: 5000 })).catch(() => { return });
-
-    /////////////////////////////////////////////////////////////////////////////////////////
+    return botReply(`Current TT bot uptime: **${convertMiliseconds(bot.uptime)}**.`, message, 5000);
 
     function convertMiliseconds(miliseconds) {
         var days, hours, minutes, seconds, total_hours, total_minutes, total_seconds;
@@ -30,7 +26,6 @@ module.exports.run = async (bot, message) => {
         minutes = parseInt(total_minutes % 60);
         hours = parseInt(total_hours % 24);
 
-
         if (days > 1) {
             if (hours > 1) {
                 if (minutes === 1 && seconds === 1) return `${days} days ${hours} hours ${minutes} minute ${seconds} second`;
@@ -38,14 +33,12 @@ module.exports.run = async (bot, message) => {
                 if (seconds === 1) return `${days} days ${hours} hours ${minutes} minutes ${seconds} second`;
                 return `${days} days ${hours} hours ${minutes} minutes ${seconds} seconds`;
             }
-
             if (hours === 1) {
                 if (minutes === 1 && seconds === 1) return `${days} days ${hours} hour ${minutes} minute ${seconds} second`;
                 if (minutes === 1) return `${days} days ${hours} hour ${minutes} minute ${seconds} seconds`;
                 if (seconds === 1) return `${days} days ${hours} hour ${minutes} minutes ${seconds} second`;
                 return `${days} days ${hours} hour ${minutes} minutes ${seconds} seconds`;
             }
-
             if (hours < 1) {
                 if (minutes === 1 && seconds === 1) return `${days} days ${hours} hours ${minutes} minute ${seconds} second`;
                 if (minutes === 1) return `${days} days ${hours} hours ${minutes} minute ${seconds} seconds`;
@@ -61,14 +54,12 @@ module.exports.run = async (bot, message) => {
                 if (seconds === 1) return `${days} day ${hours} hours ${minutes} minutes ${seconds} second`;
                 return `${days} day ${hours} hours ${minutes} minutes ${seconds} seconds`;
             }
-
             if (hours === 1) {
                 if (minutes === 1 && seconds === 1) return `${days} day ${hours} hour ${minutes} minute ${seconds} second`;
                 if (minutes === 1) return `${days} day ${hours} hour ${minutes} minute ${seconds} seconds`;
                 if (seconds === 1) return `${days} day ${hours} hour ${minutes} minutes ${seconds} second`;
                 return `${days} day ${hours} hour ${minutes} minutes ${seconds} seconds`;
             }
-
             if (hours < 1) {
 
                 if (minutes === 1 && seconds === 1) return `${days} day ${hours} hours ${minutes} minute ${seconds} second`;
@@ -85,14 +76,12 @@ module.exports.run = async (bot, message) => {
                 if (seconds === 1) return `${hours} hours ${minutes} minutes ${seconds} second`;
                 return `${hours} hours ${minutes} minutes ${seconds} seconds`;
             }
-
             if (hours === 1) {
                 if (minutes === 1 && seconds === 1) return `${hours} hour ${minutes} minute ${seconds} second`;
                 if (minutes === 1) return `${hours} hour ${minutes} minute ${seconds} seconds`;
                 if (seconds === 1) return `${hours} hour ${minutes} minutes ${seconds} second`;
                 return `${hours} hour ${minutes} minutes ${seconds} seconds`;
             }
-
             if (hours < 1) {
                 if (minutes < 1) {
                     if (seconds === 1) return `${seconds} second`;
@@ -105,6 +94,5 @@ module.exports.run = async (bot, message) => {
                 return `${minutes} minutes ${seconds} seconds`;
             }
         }
-
     };
 }

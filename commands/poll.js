@@ -1,26 +1,22 @@
+// poll.js
+// ================================
+
 const config = require("../bot-settings.json");
-const { Discord, embedColors, emojiCharacters } = require("../ttBot");
+const { Discord, embedColors, emojiCharacters, botReply } = require("../ttBot");
 
 module.exports.help = {
     name: "poll",
     description: "Quick and easy poll with multiple options, supports up to 10 choices.",
     type: "KICK_MEMBERS",
-    usage: `ℹ️ Format: **${config.BotPrefix}poll Description | Option#1 | Option#2 | Option#3**\n\nℹ️ Examples:\n${config.BotPrefix}poll What is your favorite pet? | Dog | Cat | Komodo dragon`
+    usage: `ℹ️ Format: **${config.botPrefix}poll Description | Option#1 | Option#2 | Option#3**\n\nℹ️ Examples:\n${config.botPrefix}poll What is your favorite pet? | Dog | Cat | Komodo dragon`
 };
 
 module.exports.run = async (bot, message) => {
-    //////////////////////////////////////////////////////////////////////////////////////////////
-    //                                           poll                                           //
-    //////////////////////////////////////////////////////////////////////////////////////////////
-    const pollMessage = message.content.slice(Math.round(config.BotPrefix.length + module.exports.help.name.length) + 1);
-    const pollMessageArray = pollMessage.split(" | ");
+    const pollMessageArray = message.content.slice(Math.round(config.botPrefix.length + module.exports.help.name.length) + 1).split(" | ");
 
-    if (pollMessage) {
-        if (pollMessageArray.length < 3) return message.channel.send(`Wrong command format, type **${config.BotPrefix}help ${module.exports.help.name}** to see usage and examples!`)
-            .then(message => message.delete({ timeout: 10000 })).catch(() => { return });
-
-        if (pollMessageArray.length > 11) return message.channel.send(`Command **${config.BotPrefix}${module.exports.help.name}** support only up to 10 options!`)
-            .then(message => message.delete({ timeout: 10000 })).catch(() => { return });
+    if (pollMessageArray) {
+        if (pollMessageArray.length < 3) return botReply(`Wrong command format, type **${config.botPrefix}help ${module.exports.help.name}** to see usage and examples!`, message, 5000);
+        if (pollMessageArray.length > 11) return botReply(`**${config.botPrefix}${module.exports.help.name}** support up to 10 options only!`, message, 5000);
 
         switch (pollMessageArray.length) {
             case 3: return sendPollEmbedMessage(`${emojiCharacters[1]} ${pollMessageArray[1]}\n${emojiCharacters[2]} ${pollMessageArray[2]}`, message);
@@ -35,8 +31,7 @@ module.exports.run = async (bot, message) => {
             default: return console.debug(`poll text: that not should be fired even once!`);
         }
 
-    } else return message.channel.send(`Wrong command format, type **${config.BotPrefix}help ${module.exports.help.name}** to see usage and examples!`)
-        .then(message => message.delete({ timeout: 10000 })).catch(() => { return });
+    } else return botReply(`Wrong command format, type **${config.botPrefix}help ${module.exports.help.name}** to see usage and examples!`, message, 5000);
 
     /////////////////////////////////////////////////////////////////////////////////////////
 
@@ -50,11 +45,8 @@ module.exports.run = async (bot, message) => {
             .setTimestamp()
             .setFooter(`Sent by ${message.author.tag}`)
         return message.channel.send(embed_poll)
-            .then(pollEmbed => { addOptionReactions(pollEmbed, pollMessageArray.length); })
-            .catch(error => {
-                message.channel.send(`❌ Something went wrong to send poll\n\nSummary: \`\`\`${error.message}\`\`\``)
-                    .then(message => message.delete({ timeout: 15000 })).catch(() => { return });
-            });
+            .then(pollEmbed => { if (pollEmbed) addOptionReactions(pollEmbed, pollMessageArray.length); })
+            .catch(error => botReply(`❌ Something went wrong to send poll\n\nSummary: \`\`\`${error.message}\`\`\``, message, 10000));
     }
 
     async function addOptionReactions(pollEmbed, amount) {
@@ -64,9 +56,8 @@ module.exports.run = async (bot, message) => {
                 await pollEmbed.react(emojiCharacters[2]);
                 return;
             } catch (error) {
-                if (pollEmbed.deletable) pollEmbed.delete();
-                return message.channel.send(`❌ Something went wrong to add poll reactions\n\nSummary: \`\`\`${error.message}\`\`\``)
-                    .then(message => message.delete({ timeout: 15000 })).catch(() => { return });
+                if (pollEmbed?.deletable) pollEmbed.delete().catch(error => console.error(`poll.js:1 addOptionReactions() ${error}`));
+                return botReply(`❌ Something went wrong to add poll reactions\n\nSummary: \`\`\`${error.message}\`\`\``, message, 10000);
             }
 
             case 4: try {
@@ -75,9 +66,8 @@ module.exports.run = async (bot, message) => {
                 await pollEmbed.react(emojiCharacters[3]);
                 return;
             } catch (error) {
-                if (pollEmbed.deletable) pollEmbed.delete();
-                return message.channel.send(`❌ Something went wrong to add poll reactions\n\nSummary: \`\`\`${error.message}\`\`\``)
-                    .then(message => message.delete({ timeout: 15000 })).catch(() => { return });
+                if (pollEmbed?.deletable) pollEmbed.delete().catch(error => console.error(`poll.js:2 addOptionReactions() ${error}`));
+                return botReply(`❌ Something went wrong to add poll reactions\n\nSummary: \`\`\`${error.message}\`\`\``, message, 10000);
             }
 
             case 5: try {
@@ -87,9 +77,8 @@ module.exports.run = async (bot, message) => {
                 await pollEmbed.react(emojiCharacters[4]);
                 return;
             } catch (error) {
-                if (pollEmbed.deletable) pollEmbed.delete();
-                return message.channel.send(`❌ Something went wrong to add poll reactions\n\nSummary: \`\`\`${error.message}\`\`\``)
-                    .then(message => message.delete({ timeout: 15000 })).catch(() => { return });
+                if (pollEmbed?.deletable) pollEmbed.delete().catch(error => console.error(`poll.js:3 addOptionReactions() ${error}`));
+                return botReply(`❌ Something went wrong to add poll reactions\n\nSummary: \`\`\`${error.message}\`\`\``, message, 10000);
             }
 
             case 6: try {
@@ -100,9 +89,8 @@ module.exports.run = async (bot, message) => {
                 await pollEmbed.react(emojiCharacters[5]);
                 return;
             } catch (error) {
-                if (pollEmbed.deletable) pollEmbed.delete();
-                return message.channel.send(`❌ Something went wrong to add poll reactions\n\nSummary: \`\`\`${error.message}\`\`\``)
-                    .then(message => message.delete({ timeout: 15000 })).catch(() => { return });
+                if (pollEmbed?.deletable) pollEmbed.delete().catch(error => console.error(`poll.js:4 addOptionReactions() ${error}`));
+                return botReply(`❌ Something went wrong to add poll reactions\n\nSummary: \`\`\`${error.message}\`\`\``, message, 10000);
             }
 
             case 7: try {
@@ -114,9 +102,8 @@ module.exports.run = async (bot, message) => {
                 await pollEmbed.react(emojiCharacters[6]);
                 return;
             } catch (error) {
-                if (pollEmbed.deletable) pollEmbed.delete();
-                return message.channel.send(`❌ Something went wrong to add poll reactions\n\nSummary: \`\`\`${error.message}\`\`\``)
-                    .then(message => message.delete({ timeout: 15000 })).catch(() => { return });
+                if (pollEmbed?.deletable) pollEmbed.delete().catch(error => console.error(`poll.js:5 addOptionReactions() ${error}`));
+                return botReply(`❌ Something went wrong to add poll reactions\n\nSummary: \`\`\`${error.message}\`\`\``, message, 10000);
             }
 
             case 8: try {
@@ -129,9 +116,8 @@ module.exports.run = async (bot, message) => {
                 await pollEmbed.react(emojiCharacters[7]);
                 return;
             } catch (error) {
-                if (pollEmbed.deletable) pollEmbed.delete();
-                return message.channel.send(`❌ Something went wrong to add poll reactions\n\nSummary: \`\`\`${error.message}\`\`\``)
-                    .then(message => message.delete({ timeout: 15000 })).catch(() => { return });
+                if (pollEmbed?.deletable) pollEmbed.delete().catch(error => console.error(`poll.js:6 addOptionReactions() ${error}`));
+                return botReply(`❌ Something went wrong to add poll reactions\n\nSummary: \`\`\`${error.message}\`\`\``, message, 10000);
             }
 
             case 9: try {
@@ -145,9 +131,8 @@ module.exports.run = async (bot, message) => {
                 await pollEmbed.react(emojiCharacters[8]);
                 return;
             } catch (error) {
-                if (pollEmbed.deletable) pollEmbed.delete();
-                return message.channel.send(`❌ Something went wrong to add poll reactions\n\nSummary: \`\`\`${error.message}\`\`\``)
-                    .then(message => message.delete({ timeout: 15000 })).catch(() => { return });
+                if (pollEmbed?.deletable) pollEmbed.delete().catch(error => console.error(`poll.js:7 addOptionReactions() ${error}`));
+                return botReply(`❌ Something went wrong to add poll reactions\n\nSummary: \`\`\`${error.message}\`\`\``, message, 10000);
             }
 
             case 10: try {
@@ -162,9 +147,8 @@ module.exports.run = async (bot, message) => {
                 await pollEmbed.react(emojiCharacters[9]);
                 return;
             } catch (error) {
-                if (pollEmbed.deletable) pollEmbed.delete();
-                return message.channel.send(`❌ Something went wrong to add poll reactions\n\nSummary: \`\`\`${error.message}\`\`\``)
-                    .then(message => message.delete({ timeout: 15000 })).catch(() => { return });
+                if (pollEmbed?.deletable) pollEmbed.delete().catch(error => console.error(`poll.js:8 addOptionReactions() ${error}`));
+                return botReply(`❌ Something went wrong to add poll reactions\n\nSummary: \`\`\`${error.message}\`\`\``, message, 10000);
             }
 
             case 11: try {
@@ -180,12 +164,11 @@ module.exports.run = async (bot, message) => {
                 await pollEmbed.react(emojiCharacters[10]);
                 return;
             } catch (error) {
-                if (pollEmbed.deletable) pollEmbed.delete();
-                return message.channel.send(`❌ Something went wrong to add poll reactions\n\nSummary: \`\`\`${error.message}\`\`\``)
-                    .then(message => message.delete({ timeout: 15000 })).catch(() => { return });
+                if (pollEmbed?.deletable) pollEmbed.delete().catch(error => console.error(`poll.js:9 addOptionReactions() ${error}`));
+                return botReply(`❌ Something went wrong to add poll reactions\n\nSummary: \`\`\`${error.message}\`\`\``, message, 10000);
             }
 
-            default: return console.debug(`poll reactions: that not should be fired even once!`);
+            default: return console.debug(`poll.js:10 () That not should be fired even once!`);
         }
     }
 }
