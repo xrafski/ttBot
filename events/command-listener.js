@@ -8,13 +8,14 @@ bot.on("message", async message => {
     if (message.author.bot) return;
     if (!message.content.startsWith(config.botPrefix)) return;
 
+    const { content, channel, author } = message;
     const args = message.content.slice(config.botPrefix.length).trim().split(/ +/g);
     const command = args.shift().toLowerCase();
 
     let cmdFile = bot.commands.get(command);
     if (cmdFile) {
         removeUserLastMessage(message);
-        console.info(`command-listener.js (ℹ) '${message.author.tag}' used '${(message.content.length > 40 ? `${message.content.slice(0, 40)}...` : `${message.content}`)}' on the ${(message.channel?.name ? `#${message.channel.name} channel` : 'direct message')}.`);
+        console.info(`command-listener.js (ℹ) '${author.tag}' used '${(content.length > 40 ? `${content.replace(/\s+/g, ' ').slice(0, 40)}...` : `${content.replace(/\s+/g, ' ')}`)}' on the ${(channel?.name ? `#${channel.name} channel` : 'direct message')}.`);
 
         switch (cmdFile.help.type) {
             case "KICK_MEMBERS": {
