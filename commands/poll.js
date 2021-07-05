@@ -2,7 +2,7 @@
 // ================================
 
 const config = require("../bot-settings.json");
-const { Discord, embedColors, emojiCharacters, botReply } = require("../ttBot");
+const { Discord, embedColors, emojiCharacters, botReply } = require("../twistedBot");
 
 module.exports.help = {
     name: "poll",

@@ -1,4 +1,4 @@
-const { bot, BotVersion, errorLog } = require('../ttBot');
+const { bot, BotVersion, errorLog } = require('../twistedBot');
 const config = require("../bot-settings.json");
 bot.login(config.botToken);
 

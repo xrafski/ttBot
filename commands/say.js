@@ -1,7 +1,7 @@
 // say.js
 // ================================
 
-const { Discord, embedColors, botReply } = require('../ttBot');
+const { Discord, embedColors, botReply } = require('../twistedBot');
 const config = require("../bot-settings.json");
 
 module.exports.help = {

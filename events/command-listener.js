@@ -1,7 +1,7 @@
 // command-listener.js
 // ================================
 
-const { bot, removeUserLastMessage, errorLog, botReply } = require('../ttBot');
+const { bot, removeUserLastMessage, errorLog, botReply } = require('../twistedBot');
 const config = require("../bot-settings.json");
 
 bot.on("message", async message => {

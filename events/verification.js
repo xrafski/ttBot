@@ -1,5 +1,5 @@
 const config = require("../bot-settings.json");
-const { bot, botReply } = require('../ttBot');
+const { bot, botReply } = require('../twistedBot');
 
 //////////////////////////////////////////////////////////////////////////////////////////////
 //                                   VERIFICATION HANDLER                                   //

@@ -72,8 +72,8 @@ module.exports = {
 		const ownerObj = bot.users.cache.get(config.botOwnerID);
 		if (ownerObj) {
 			ownerObj.send(message)
-				.catch(error => console.error(`ttBot.js:1 ownerDM() Error to send owner DM ${error}`));
-		} else return console.error(`ttBot.js:2 ownerDM() Bot owner is undefined probably wrong uID in config.botOwnerID`);
+				.catch(error => console.error(`twistedBot.js:1 ownerDM() Error to send owner DM ${error}`));
+		} else return console.error(`twistedBot.js:2 ownerDM() Bot owner is undefined probably wrong uID in config.botOwnerID`);
 	},
 
 	errorLog: function (text, error) {
@@ -84,8 +84,8 @@ module.exports = {
 		const ownerObj = bot.users.cache.get(config.botOwnerID);
 		if (ownerObj) {
 			ownerObj.send(`❌ an issue occured with the ${bot.user.username} application!\n👉 **${text}**\n\`\`\`${error}\`\`\``)
-				.catch(error => console.error(`ttBot.js:1 errorLog() Error to send owner DM ${error}`));
-		} else return console.error(`ttBot.js:2 errorLog() Bot owner is undefined probably wrong uID in config.botOwnerID`);
+				.catch(error => console.error(`twistedBot.js:1 errorLog() Error to send owner DM ${error}`));
+		} else return console.error(`twistedBot.js:2 errorLog() Bot owner is undefined probably wrong uID in config.botOwnerID`);
 	},
 
 	getCommand: function (commandName) {
@@ -94,7 +94,7 @@ module.exports = {
 	},
 
 	messageRemoverWithReact: async function (message, author) {
-		await message.react('❌').catch(error => console.error(`ttBot.js:1 messageRemoverWithReact() Error to add reaction ${error} on the #${message.channel.name} in '${message.guild.name}'.`));
+		await message.react('❌').catch(error => console.error(`twistedBot.js:1 messageRemoverWithReact() Error to add reaction ${error} on the #${message.channel.name} in '${message.guild.name}'.`));
 
 		const emojiFilter = (reaction, user) => {
 			return ['❌'].includes(reaction.emoji.name) && !user.bot && author === user;
@@ -104,18 +104,18 @@ module.exports = {
 			.then(collected => {
 				const reaction = collected.first();
 				if (reaction.emoji.name === '❌')
-					if (message.deletable) return message.delete().catch(error => console.error(`ttBot.js:2 messageRemoverWithReact() ${error} on the #${message.channel.name} in '${message.guild.name}'`));
+					if (message.deletable) return message.delete().catch(error => console.error(`twistedBot.js:2 messageRemoverWithReact() ${error} on the #${message.channel.name} in '${message.guild.name}'`));
 			})
 			.catch(error => {
-				if (message.deletable) message.delete().catch(error => console.error(`ttBot.js:3 messageRemoverWithReact() ${error} on the #${message.channel.name} in '${message.guild.name}'`));
+				if (message.deletable) message.delete().catch(error => console.error(`twistedBot.js:3 messageRemoverWithReact() ${error} on the #${message.channel.name} in '${message.guild.name}'`));
 				if (error.message === "Cannot read property 'emoji' of undefined") return;
-				else console.error(`ttBot.js:4 messageRemoverWithReact() ${error} on the #${message.channel.name} in '${message.guild.name}'`);
+				else console.error(`twistedBot.js:4 messageRemoverWithReact() ${error} on the #${message.channel.name} in '${message.guild.name}'`);
 			});
 	},
 
 	sendEmbedLog: function (embedMessage, channelID, webHookName) {
 		const logChannel = bot.channels.cache.get(channelID);
-		if (!logChannel) return console.error(`ttBot.js:1 sendEmbedLog() provided channelID(${channelID}) doesn't exist.`);
+		if (!logChannel) return console.error(`twistedBot.js:1 sendEmbedLog() provided channelID(${channelID}) doesn't exist.`);
 		else {
 			logChannel.fetchWebhooks()
 				.then(hooks => {
@@ -128,20 +128,20 @@ module.exports = {
 							.then(hook => {
 								console.debug(`✅ A new webhook '${webHookName}' has been created in the #${logChannel.name} channel.`);
 								hook.send(embedMessage)
-									.catch(error => console.error(`ttBot.js:2 sendEmbedLog() Error to send webhook message ${error}`));
+									.catch(error => console.error(`twistedBot.js:2 sendEmbedLog() Error to send webhook message ${error}`));
 							})
-							.catch(error => console.error(`ttBot.js:3 sendEmbedLog() Error to create a webhook ${error}`));
+							.catch(error => console.error(`twistedBot.js:3 sendEmbedLog() Error to create a webhook ${error}`));
 					} else {
 						existingHook.send(embedMessage)
-							.catch(error => console.error(`ttBot.js:2 sendEmbedLog() Error to send webhook message ${error}`));
+							.catch(error => console.error(`twistedBot.js:2 sendEmbedLog() Error to send webhook message ${error}`));
 					}
 				})
-				.catch(error => console.error(`ttBot.js:4 sendEmbedLog() Error to fetch webhooks for #${logChannel.name} channel ${error}`));
+				.catch(error => console.error(`twistedBot.js:4 sendEmbedLog() Error to fetch webhooks for #${logChannel.name} channel ${error}`));
 		}
 	},
 
 	botReply: function (text, message, time, attachFile, embedImage) {
-		if (!message) return console.error(`ttBot.js:1 botReply() message object is not provided`);
+		if (!message) return console.error(`twistedBot.js:1 botReply() message object is not provided`);
 		const attachmentFile = (attachFile ? new Discord.MessageAttachment(attachFile) : undefined);
 		const imageFileSplit = (embedImage ? embedImage.split('/').slice(-1).toString() : undefined);
 
@@ -156,9 +156,9 @@ module.exports = {
 					return message.channel.send(text, embed_message)
 						.then(msg => {
 							if (msg?.deletable) msg.delete({ timeout: time })
-								.catch(error => console.error(`ttBot.js:2 botReply() ${error}`));
+								.catch(error => console.error(`twistedBot.js:2 botReply() ${error}`));
 						})
-						.catch(error => console.error(`ttBot.js:3 botReply() ${error}`));
+						.catch(error => console.error(`twistedBot.js:3 botReply() ${error}`));
 				} else if (imageFileSplit) {
 					const embed_message = new Discord.MessageEmbed()
 						.setColor('RANDOM')
@@ -167,23 +167,23 @@ module.exports = {
 					return message.channel.send(text, embed_message)
 						.then(msg => {
 							if (msg?.deletable) msg.delete({ timeout: time })
-								.catch(error => console.error(`ttBot.js:4 botReply() ${error}`));
+								.catch(error => console.error(`twistedBot.js:4 botReply() ${error}`));
 						})
-						.catch(error => console.error(`ttBot.js:5 botReply() ${error}`));
+						.catch(error => console.error(`twistedBot.js:5 botReply() ${error}`));
 				} else if (attachmentFile) {
 					return message.channel.send(text, attachmentFile)
 						.then(msg => {
 							if (msg?.deletable) msg.delete({ timeout: time })
-								.catch(error => console.error(`ttBot.js:6 botReply() ${error}`));
+								.catch(error => console.error(`twistedBot.js:6 botReply() ${error}`));
 						})
-						.catch(error => console.error(`ttBot.js:7 botReply() ${error}`));
+						.catch(error => console.error(`twistedBot.js:7 botReply() ${error}`));
 				} else {
 					return message.channel.send(text)
 						.then(msg => {
 							if (msg?.deletable) msg.delete({ timeout: time })
-								.catch(error => console.error(`ttBot.js:8 botReply() ${error}`));
+								.catch(error => console.error(`twistedBot.js:8 botReply() ${error}`));
 						})
-						.catch(error => console.error(`ttBot.js:9 botReply() ${error}`));
+						.catch(error => console.error(`twistedBot.js:9 botReply() ${error}`));
 				}
 			} else { // if without text
 				if (imageFileSplit && attachmentFile) {
@@ -195,9 +195,9 @@ module.exports = {
 					return message.channel.send(embed_message)
 						.then(msg => {
 							if (msg?.deletable) msg.delete({ timeout: time })
-								.catch(error => console.error(`ttBot.js:10 botReply() ${error}`));
+								.catch(error => console.error(`twistedBot.js:10 botReply() ${error}`));
 						})
-						.catch(error => console.error(`ttBot.js:11 botReply() ${error}`));
+						.catch(error => console.error(`twistedBot.js:11 botReply() ${error}`));
 				} else if (imageFileSplit) {
 					const embed_message = new Discord.MessageEmbed()
 						.setColor('RANDOM')
@@ -206,17 +206,17 @@ module.exports = {
 					return message.channel.send(embed_message)
 						.then(msg => {
 							if (msg?.deletable) msg.delete({ timeout: time })
-								.catch(error => console.error(`ttBot.js:12 botReply() ${error}`));
+								.catch(error => console.error(`twistedBot.js:12 botReply() ${error}`));
 						})
-						.catch(error => console.error(`ttBot.js:13 botReply() ${error}`));
+						.catch(error => console.error(`twistedBot.js:13 botReply() ${error}`));
 				} else if (attachmentFile) {
 					return message.channel.send(attachmentFile)
 						.then(msg => {
 							if (msg?.deletable) msg.delete({ timeout: time })
-								.catch(error => console.error(`ttBot.js:14 botReply() ${error}`));
+								.catch(error => console.error(`twistedBot.js:14 botReply() ${error}`));
 						})
-						.catch(error => console.error(`ttBot.js:15 botReply() ${error}`));
-				} else return console.error(`ttBot.js:16 botReply() There is no text nor attachment!`);
+						.catch(error => console.error(`twistedBot.js:15 botReply() ${error}`));
+				} else return console.error(`twistedBot.js:16 botReply() There is no text nor attachment!`);
 			}
 		} else { // if there is no time provided
 			if (text) { // check if function has text provided
@@ -227,20 +227,20 @@ module.exports = {
 						.setImage(`attachment://${imageFileSplit}`)
 						.attachFiles([attachmentFile])
 					return message.channel.send(text, embed_message)
-						.catch(error => console.error(`ttBot.js:17 botReply() ${error}`));
+						.catch(error => console.error(`twistedBot.js:17 botReply() ${error}`));
 				} else if (imageFileSplit) {
 					const embed_message = new Discord.MessageEmbed()
 						.setColor('RANDOM')
 						.attachFiles([embedImage])
 						.setImage(`attachment://${imageFileSplit}`)
 					return message.channel.send(text, embed_message)
-						.catch(error => console.error(`ttBot.js:18 botReply() ${error}`));
+						.catch(error => console.error(`twistedBot.js:18 botReply() ${error}`));
 				} else if (attachmentFile) {
 					return message.channel.send(text, attachmentFile)
-						.catch(error => console.error(`ttBot.js:19 botReply() ${error}`));
+						.catch(error => console.error(`twistedBot.js:19 botReply() ${error}`));
 				} else {
 					return message.channel.send(text)
-						.catch(error => console.error(`ttBot.js:20 botReply() ${error}`));
+						.catch(error => console.error(`twistedBot.js:20 botReply() ${error}`));
 				}
 			} else { // if without text
 				if (imageFileSplit && attachmentFile) {
@@ -250,18 +250,18 @@ module.exports = {
 						.setImage(`attachment://${imageFileSplit}`)
 						.attachFiles([attachmentFile])
 					return message.channel.send(embed_message)
-						.catch(error => console.error(`ttBot.js:21 botReply() ${error}`));
+						.catch(error => console.error(`twistedBot.js:21 botReply() ${error}`));
 				} else if (imageFileSplit) {
 					const embed_message = new Discord.MessageEmbed()
 						.setColor('RANDOM')
 						.attachFiles([embedImage])
 						.setImage(`attachment://${imageFileSplit}`)
 					return message.channel.send(embed_message)
-						.catch(error => console.error(`ttBot.js:22 botReply() ${error}`));
+						.catch(error => console.error(`twistedBot.js:22 botReply() ${error}`));
 				} else if (attachmentFile) {
 					return message.channel.send(attachmentFile)
-						.catch(error => console.error(`ttBot.js:23 botReply() ${error}`));
-				} else return console.error(`ttBot.js:24 botReply() There is no text nor attachment!`);
+						.catch(error => console.error(`twistedBot.js:23 botReply() ${error}`));
+				} else return console.error(`twistedBot.js:24 botReply() There is no text nor attachment!`);
 			}
 		}
 	},
@@ -271,8 +271,8 @@ module.exports = {
 		message.author.lastMessage.channel.messages.fetch(message.author.lastMessage.id)
 			.then(userLastMessage => {
 				if (userLastMessage.deletable) userLastMessage.delete({ timeout: 2000 })
-					.catch(error => console.error(`ttBot.js:1 removeUserLastMessage() '${message.content}' sent by '${message.author.tag}' ${error}`));
+					.catch(error => console.error(`twistedBot.js:1 removeUserLastMessage() '${message.content}' sent by '${message.author.tag}' ${error}`));
 			})
-			.catch(error => console.error(`ttBot.js:2 removeUserLastMessage() '${message.content}' sent by '${message.author.tag}' ${error}`));
+			.catch(error => console.error(`twistedBot.js:2 removeUserLastMessage() '${message.content}' sent by '${message.author.tag}' ${error}`));
 	}
 }

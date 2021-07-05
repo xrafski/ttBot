@@ -1,7 +1,7 @@
 // help.js
 // ================================
 
-const { getCommand, messageRemoverWithReact, botReply } = require('../ttBot');
+const { getCommand, messageRemoverWithReact, botReply } = require('../twistedBot');
 const config = require("../bot-settings.json");
 
 module.exports.help = {

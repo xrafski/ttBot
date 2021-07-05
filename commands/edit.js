@@ -1,7 +1,7 @@
 // edit.js
 // ================================
 
-const { Discord, sendEmbedLog, embedColors, botReply } = require('../ttBot');
+const { Discord, sendEmbedLog, embedColors, botReply } = require('../twistedBot');
 const config = require("../bot-settings.json");
 
 module.exports.help = {

@@ -2,7 +2,7 @@
 // ================================
 
 const config = require("../bot-settings.json");
-const { botReply } = require("../ttBot");
+const { botReply } = require("../twistedBot");
 
 module.exports.help = {
     name: "uptime",

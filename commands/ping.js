@@ -1,7 +1,7 @@
 // ping.js
 // ================================
 
-const { botReply } = require("../ttBot");
+const { botReply } = require("../twistedBot");
 
 module.exports.help = {
     name: "ping",
